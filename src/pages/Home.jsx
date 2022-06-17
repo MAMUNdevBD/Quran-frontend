@@ -13,25 +13,25 @@ const Home = () => {
 
   const chapterView = () =>
     chapters.map((chapter, index) => (
-      <>
-        <div className="" key={index}>
-          <Link to={"/chapter/" + chapter.id}>
-            <div className="">
-              {chapter.chapter_number +
-                ". " +
-                chapter.name_simple +
-                " (" +
-                chapter.translated_name.name +
-                ")"}
-            </div>
-          </Link>
-        </div>
-      </>
+      <div className="" key={index}>
+        <Link to={"/chapter/" + chapter.id}>
+          <div className="">
+            {chapter.chapter_number +
+              ". " +
+              chapter.name_simple +
+              " (" +
+              chapter.translated_name.name +
+              ")"}
+          </div>
+        </Link>
+      </div>
     ));
   return (
     <>
-      <h1>Chapters</h1>
-      <div className="grid grid-cols-4">{chapterView()}</div>
+      <div className="container mx-auto">
+        <h1 className="text-2xl mb-5">Chapters</h1>
+        <div className="grid grid-cols-4">{chapterView()}</div>
+      </div>
     </>
   );
 };

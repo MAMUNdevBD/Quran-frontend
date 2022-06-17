@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 const ChapterView = () => {
   const { id } = useParams();
-  console.log(id);
+  const lang = "en";
 
   const [chapter, setChapter] = useState(null);
   const [chapterInfo, setChapterInfo] = useState(null);
@@ -12,44 +12,64 @@ const ChapterView = () => {
 
   useEffect(() => {
     axios
-      .get("https://api.quran.com/api/v3/chapters/" + id + "?language=bn")
+      .get("https://api.quran.com/api/v3/chapters/" + id + "?language=" + lang)
       .then((res) => setChapter(res.data.chapter));
     axios
-      .get("https://api.quran.com/api/v3/chapters/" + id + "/info?language=bn")
+      .get(
+        "https://api.quran.com/api/v3/chapters/" + id + "/info?language=" + lang
+      )
       .then((res) => setChapterInfo(res.data.chapter_info));
     axios
       .get(
         "https://api.quran.com/api/v3/chapters/" +
           id +
-          "/verses?language=bn&limit=20&page=1"
+          "/verses?language=" +
+          lang +
+          "&limit=20&page=1"
       )
       .then((res) => setVerses(res.data));
   }, [id]);
 
-  const versesView = (verses) =>
-    verses.map((verse, index) => (
-      <div className="" key={index}>
-        1
-      </div>
-    ));
+  // const versesView = (verses) =>
+  //   ;
 
   return (
-    <div>
-      {chapter ? (
-        <h1 className="text-center font-bold text-3xl mt-10">
-          {chapter.name_arabic +
-            " " +
-            chapter.name_simple +
-            " (" +
-            chapter.translated_name.name +
-            ")"}
-        </h1>
-      ) : (
-        ""
-      )}
-      <div className="">{chapterInfo ? chapterInfo.short_text : ""}</div>
+    <div className="container mx-auto text-xl">
       <div className="">
-        <div className="">{verses ? versesView(verses.verses) : ""}</div>
+        {chapter ? (
+          <h1 className="text-center font-bold text-3xl mt-10">
+            {chapter.name_arabic +
+              " " +
+              chapter.name_simple +
+              " (" +
+              chapter.translated_name.name +
+              ")"}
+          </h1>
+        ) : (
+          ""
+        )}
+        <div className="text-center">
+          {chapterInfo ? chapterInfo.short_text : ""}
+        </div>
+        <div className="flex flex-col gap-10 mt-10 items-end">
+          {verses?.verses.map((verse, index) => (
+            <div className="flex gap-2" key={index}>
+              <div className="flex flex-row-reverse gap-2">
+                {verse.words.map((word, i) => (
+                  <div
+                    key={i}
+                    className="relative group cursor-pointer hover:text-sky-500"
+                  >
+                    {word.text_madani}
+                    <div className="hidden group-hover:flex w-max z-10 absolute -top-6 right-0 bg-gray-600 rounded text-white text-base px-2">
+                      {word.translation.text}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
